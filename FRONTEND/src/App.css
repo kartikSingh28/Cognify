@@ -1,0 +1,58 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root Container */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #EAF6F4; /* minty Cognify tone */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  font-family: "Inter", sans-serif;
+  color: #2C6E69; /* Harmonized text color */
+}
+
+/* Optional: keep components nicely spaced */
+section {
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+/* Logo hover effect (if still used) */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #4ca28daa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* General card styling */
+.card {
+  background: #ffffffcc;
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2em;
+}
+
+/* Footer readability fix */
+footer {
+  color: #E8F6F3;
+}
+
+/* Docs text (optional) */
+.read-the-docs {
+  color: #2C6E69;
+}
