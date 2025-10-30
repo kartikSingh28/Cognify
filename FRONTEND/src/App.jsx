@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {Home} from "./Pages/Home";
+import Signup from "./Pages/Signup";
+import Signin from "./Pages/Signin";
 import "./App.css";
 
 
@@ -23,6 +25,8 @@ function App() {
         <Route path="/reminders" element={<Reminders />} />
         <Route path="/mood" element={<Mood />} />
         <Route path="/family" element={<Family />} />
+        <Route path="/login" element ={<Signup />} />
+        <Route path="/signin"  element ={<Signin />}  />
       </Routes>
     </BrowserRouter>
   );
