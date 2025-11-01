@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import {Navbar} from "../Components/Navbar";
-import {Footer} from "../Components/Footer";
+
 import AuthLayout from "../Auth/AuthLayout";
 import AuthCard from "../Auth/AuthCard";
 import AuthHeader from "../Auth/Authheader";
@@ -98,7 +98,7 @@ const Signin = () => {
         </AuthCard>
       </AuthLayout>
 
-      <Footer />
+   
     </div>
   );
 };
