@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Mail, Lock, User } from "lucide-react";
 import { Navbar } from "../Components/Navbar";
-
 import AuthLayout from "../Auth/AuthLayout";
 import AuthCard from "../Auth/AuthCard";
 import AuthHeader from "../Auth/AuthHeader";
 import AuthInput from "../Auth/AuthInput";
 import AuthButton from "../Auth/AuthButton";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -17,19 +16,42 @@ const Signup = () => {
     password: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState(""); // ✅ feedback message
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log("Form Submitted:", formData);
+    setMessage("");
 
-    setTimeout(() => {
+    try {
+      // ✅ Send request to your Express backend
+      const response = await fetch("http://localhost:3000/api/v1/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("✅ Account created successfully!");
+        console.log("Signup success:", data);
+        setFormData({ fullName: "", email: "", password: "" });
+      } else {
+        setMessage(`❌ ${data.message || "Signup failed"}`);
+        console.error("Signup error:", data);
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      setMessage("❌ Unable to connect to server");
+    } finally {
       setIsSubmitting(false);
-      console.log("Account created successfully!");
-    }, 1500);
+    }
   };
 
   return (
@@ -88,7 +110,11 @@ const Signup = () => {
             />
           </form>
 
-          
+          {/* ✅ Message Display */}
+          {message && (
+            <p className="text-center text-sm mt-4 text-gray-600">{message}</p>
+          )}
+
           <p className="text-center text-sm text-textPrimary/70 mt-6">
             Already have an account?{" "}
             <Link
@@ -100,8 +126,6 @@ const Signup = () => {
           </p>
         </AuthCard>
       </AuthLayout>
-
-      
     </div>
   );
 };
