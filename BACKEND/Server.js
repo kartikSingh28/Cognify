@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors"); 
 const { UserRouter } = require("./ROUTES/User");
+const config=require("./config");
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use("/api/v1/user", UserRouter);
 
 async function main() {
   try {
-    await mongoose.connect(process.env.MONGO_URL);
+    await mongoose.connect(config.MONGO_URL);
     console.log(" Connected to MongoDB");
 
     app.listen(3000, () => {
