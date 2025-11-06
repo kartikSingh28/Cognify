@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Mail, Lock, User } from "lucide-react";
 import { Navbar } from "../Components/Navbar";
 import AuthLayout from "../Auth/AuthLayout";
@@ -17,6 +18,7 @@ const Signup = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState(""); // ✅ feedback message
+  const navigate = useNavigate(); // redirect after signup+login
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,7 +27,8 @@ const Signup = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage("");
-
+    // capture credentials because we'll attempt to auto-login after signup
+    const credentials = { email: formData.email, password: formData.password };
     try {
       // ✅ Send request to your Express backend
       const response = await fetch("http://localhost:3000/api/v1/user/signup", {
@@ -39,9 +42,35 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("✅ Account created successfully!");
+        setMessage("✅ Account created successfully! Attempting to sign you in...");
         console.log("Signup success:", data);
-        setFormData({ fullName: "", email: "", password: "" });
+
+        // Auto-signin using the same credentials
+        try {
+          const signInResp = await fetch("http://localhost:3000/api/v1/user/signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+          });
+
+          const signInData = await signInResp.json();
+          if (signInResp.ok) {
+            // persist token and user for greeting
+            localStorage.setItem("token", signInData.token);
+            if (signInData.user) localStorage.setItem("user", JSON.stringify(signInData.user));
+            setMessage("✅ Signed in — redirecting to your dashboard...");
+            // small delay so user sees the message
+            setTimeout(() => navigate("/dashboard"), 700);
+            // clear form
+            setFormData({ fullName: "", email: "", password: "" });
+          } else {
+            setMessage(`✅ Account created — but auto-login failed: ${signInData.message || "Please sign in manually."}`);
+            console.error("Auto-signin failed:", signInData);
+          }
+        } catch (err) {
+          console.error("Auto-signin network error:", err);
+          setMessage("✅ Account created — but auto-login failed due to network error. Please sign in manually.");
+        }
       } else {
         setMessage(`❌ ${data.message || "Signup failed"}`);
         console.error("Signup error:", data);

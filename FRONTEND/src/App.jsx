@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {Home} from "./Pages/Home";
+import { Home2 } from "./Pages/Home2";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import "./App.css";
@@ -25,11 +26,13 @@ function App() {
         <Route path="/reminders" element={<Reminders />} />
         <Route path="/mood" element={<Mood />} />
         <Route path="/family" element={<Family />} />
+  <Route path="/dashboard" element={<Home2 />} />
         <Route path="/login" element ={<Signup />} />
         <Route path="/signin"  element ={<Signin />}  />
       </Routes>
     </BrowserRouter>
   );
 }
+
 
 export default App;

@@ -37,6 +37,10 @@ const Signin = () => {
       if (response.ok) {
         // ✅ Save JWT token in localStorage
         localStorage.setItem("token", data.token);
+        // ✅ Save basic user info so other components can greet the user
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
         setMessage("✅ Login successful!");
         console.log("User logged in:", data);
 

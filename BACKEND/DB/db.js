@@ -8,6 +8,34 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-const userModel = mongoose.model("User", userSchema);
+//memory schema
 
-module.exports = { userModel };
+const memorySchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userModel",
+    required: true,
+  },
+  gameName: {
+    type: String,
+    required: true,
+  },
+  score: {
+    type: Number,
+    required: true,
+  },
+  level: {
+    type: Number,
+    default: 1,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const userModel = mongoose.model("User", userSchema);
+const memoryModel=mongoose.model("memory",memorySchema);
+
+module.exports = { userModel,memoryModel };
+
